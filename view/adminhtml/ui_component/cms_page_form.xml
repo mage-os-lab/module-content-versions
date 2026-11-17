@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="scheduled_changes" sortOrder="1">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+            <label translate="true">Planned Versions</label>
+        </settings>
+        <container name="scheduled_changes_container">
+            <htmlContent name="html_content">
+                <block name="mageos_versions_page_updates" class="MageOS\ContentVersions\Block\Adminhtml\EntityUpdates">
+                    <arguments>
+                        <argument name="entity_type" xsi:type="string">page</argument>
+                    </arguments>
+                </block>
+            </htmlContent>
+        </container>
+    </fieldset>
+</form>

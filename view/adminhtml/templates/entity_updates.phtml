@@ -1,0 +1,75 @@
+<?php
+declare(strict_types=1);
+
+/** @var \MageOS\ContentVersions\Block\Adminhtml\EntityUpdates $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$date = fn (?string $value) => $value
+    ? $block->formatDate($value, \IntlDateFormatter::MEDIUM, true)
+    : (string) __('No end (permanent)');
+?>
+<?php if (!$block->getEntityId()): ?>
+    <p><?= $escaper->escapeHtml(__('Save it first to schedule content updates.')) ?></p>
+<?php else: ?>
+    <?php $updates = $block->getUpdates(); ?>
+    <?php if ($updates): ?>
+        <table class="data-grid">
+            <thead>
+                <tr>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Update')) ?></th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Start')) ?></th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('End')) ?></th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Actions')) ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($updates as $update): ?>
+                    <tr>
+                        <td><?= $escaper->escapeHtml($update->getName()) ?></td>
+                        <td><?= $escaper->escapeHtml($date($update->getStartTime())) ?></td>
+                        <td><?= $escaper->escapeHtml($date($update->getEndTime())) ?></td>
+                        <td><?= $escaper->escapeHtml($block->getStatusLabel($update)) ?></td>
+                        <td>
+                            <a href="<?= $escaper->escapeUrl($block->getActionUrl('edit', $update)) ?>">
+                                <?= $escaper->escapeHtml(__('View/Edit')) ?>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a href="<?= $escaper->escapeUrl($block->getPreviewUrl($update)) ?>"
+                               target="_blank" rel="noopener">
+                                <?= $escaper->escapeHtml(__('Preview')) ?>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <form method="post"
+                                  action="<?= $escaper->escapeUrl($block->getActionUrl('delete', $update)) ?>"
+                                  id="version-delete-<?= (int) $update->getId() ?>" style="display:inline">
+                                <input type="hidden" name="form_key"
+                                       value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+                                <button type="submit" class="action-default">
+                                    <?= $escaper->escapeHtml(__('Delete')) ?>
+                                </button>
+                            </form>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onsubmit',
+                                'if (!confirm(' . json_encode(
+                                    (string) __(
+                                        'Delete this update? If it is active, the previous content is restored.'
+                                    )
+                                ) . ')) { event.preventDefault(); }',
+                                '#version-delete-' . (int) $update->getId()
+                            ) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p><?= $escaper->escapeHtml(__('No scheduled update.')) ?></p>
+    <?php endif; ?>
+    <p style="margin-top: 1.5rem">
+        <a class="action-default" href="<?= $escaper->escapeUrl($block->getNewUrl()) ?>">
+            <?= $escaper->escapeHtml(__('Add Planned Version')) ?>
+        </a>
+    </p>
+<?php endif; ?>

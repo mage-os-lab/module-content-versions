@@ -1,0 +1,47 @@
+Save,Speichern
+You are not allowed to change this content.,Sie dürfen diesen Inhalt nicht ändern.
+You deleted the scheduled update.,Sie haben die geplante Aktualisierung gelöscht.
+Add Planned Version,Geplante Version hinzufügen
+Planned Content Version,Geplante Inhaltsversion
+Planned Content Versions,Geplante Inhaltsversionen
+You saved the scheduled update.,Sie haben die geplante Aktualisierung gespeichert.
+This update no longer exists.,Diese Aktualisierung existiert nicht mehr.
+A finished update cannot be changed.,Eine abgeschlossene Aktualisierung kann nicht mehr geändert werden.
+A name and a start date are required.,Ein Name und ein Startdatum sind erforderlich.
+The end date must be after the start date.,Das Enddatum muss nach dem Startdatum liegen.
+Another update of this content is scheduled during this period.,Für diesen Zeitraum ist bereits eine andere Aktualisierung dieses Inhalts geplant.
+"Unknown content type ""%1"".",Unbekannter Inhaltstyp „%1“.
+Scheduled,Geplant
+Active,Aktiv
+Finished,Abgeschlossen
+Edit,Bearbeiten
+Preview,Vorschau
+Delete,Löschen
+"Delete ""%1""",„%1“ löschen
+"Delete this update? If it is active, the previous content is restored.","Diese Aktualisierung löschen? Ist sie aktiv, wird der vorherige Inhalt wiederhergestellt."
+No end (permanent),Kein Ende (dauerhaft)
+Save it first to schedule content updates.,"Zuerst speichern, um Inhaltsaktualisierungen zu planen."
+Update,Aktualisierung
+Start,Beginn
+End,Ende
+Status,Status
+Actions,Aktionen
+View/Edit,Anzeigen/Bearbeiten
+No scheduled update.,Keine geplante Aktualisierung.
+Planned Versions,Geplante Versionen
+Back,Zurück
+Schedule,Zeitplan
+ID,ID
+Type,Typ
+Content ID,Inhalts-ID
+Update Name,Name der Aktualisierung
+Start Date,Startdatum
+End Date,Enddatum
+"Leave empty for a permanent change. With an end date, the previous content comes back at that time.",Für eine dauerhafte Änderung leer lassen. Mit einem Enddatum kehrt der vorherige Inhalt zu diesem Zeitpunkt zurück.
+Content During the Update,Inhalt während der Aktualisierung
+Title,Titel
+Content Heading,Inhaltsüberschrift
+Meta Title,Meta-Titel
+Meta Keywords,Meta-Schlüsselwörter
+Meta Description,Meta-Beschreibung
+Page / Block,Seite / Block

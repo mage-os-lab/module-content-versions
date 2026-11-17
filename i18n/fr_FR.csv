@@ -1,0 +1,47 @@
+Save,Enregistrer
+You are not allowed to change this content.,Vous n'êtes pas autorisé à modifier ce contenu.
+You deleted the scheduled update.,Vous avez supprimé la mise à jour planifiée.
+Add Planned Version,Ajouter une version planifiée
+Planned Content Version,Version de contenu planifiée
+Planned Content Versions,Versions de contenu planifiées
+You saved the scheduled update.,Vous avez enregistré la mise à jour planifiée.
+This update no longer exists.,Cette mise à jour n'existe plus.
+A finished update cannot be changed.,Une mise à jour terminée ne peut plus être modifiée.
+A name and a start date are required.,Un nom et une date de début sont obligatoires.
+The end date must be after the start date.,La date de fin doit être postérieure à la date de début.
+Another update of this content is scheduled during this period.,Une autre mise à jour de ce contenu est planifiée sur cette période.
+"Unknown content type ""%1"".",Type de contenu inconnu « %1 ».
+Scheduled,Planifiée
+Active,Active
+Finished,Terminée
+Edit,Modifier
+Preview,Aperçu
+Delete,Supprimer
+"Delete ""%1""",Supprimer « %1 »
+"Delete this update? If it is active, the previous content is restored.","Supprimer cette mise à jour ? Si elle est active, le contenu précédent est restauré."
+No end (permanent),Sans fin (permanent)
+Save it first to schedule content updates.,Enregistrez d'abord pour planifier des mises à jour du contenu.
+Update,Mise à jour
+Start,Début
+End,Fin
+Status,Statut
+Actions,Actions
+View/Edit,Voir/Modifier
+No scheduled update.,Aucune mise à jour planifiée.
+Planned Versions,Versions planifiées
+Back,Retour
+Schedule,Planification
+ID,ID
+Type,Type
+Content ID,ID du contenu
+Update Name,Nom de la mise à jour
+Start Date,Date de début
+End Date,Date de fin
+"Leave empty for a permanent change. With an end date, the previous content comes back at that time.","Laisser vide pour un changement permanent. Avec une date de fin, le contenu précédent revient à ce moment-là."
+Content During the Update,Contenu pendant la mise à jour
+Title,Titre
+Content Heading,Titre du contenu
+Meta Title,Meta titre
+Meta Keywords,Meta mots-clés
+Meta Description,Meta description
+Page / Block,Page / Bloc

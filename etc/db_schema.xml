@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mageos_versions_update" resource="default" engine="innodb"
+           comment="Scheduled content updates of CMS pages and blocks">
+        <column xsi:type="int" name="update_id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="entity_type" length="16" nullable="false" comment="page or block"/>
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" comment="CMS page or block ID"/>
+        <column xsi:type="varchar" name="name" length="255" nullable="false" comment="Update name"/>
+        <column xsi:type="datetime" name="start_time" nullable="false" comment="Start (UTC)"/>
+        <column xsi:type="datetime" name="end_time" nullable="true" comment="End (UTC), empty = permanent change"/>
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" default="0"
+                comment="0 scheduled, 1 active, 2 finished"/>
+        <column xsi:type="mediumtext" name="data" nullable="true" comment="Staged field values (JSON)"/>
+        <column xsi:type="mediumtext" name="original" nullable="true"
+                comment="Field values replaced when the update started (JSON)"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="update_id"/>
+        </constraint>
+        <index referenceId="MAGEOS_VERSIONS_UPDATE_ENTITY_TYPE_ENTITY_ID" indexType="btree">
+            <column name="entity_type"/>
+            <column name="entity_id"/>
+        </index>
+        <index referenceId="MAGEOS_VERSIONS_UPDATE_STATUS_START_TIME" indexType="btree">
+            <column name="status"/>
+            <column name="start_time"/>
+        </index>
+    </table>
+</schema>

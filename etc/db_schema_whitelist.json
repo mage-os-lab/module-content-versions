@@ -1,0 +1,23 @@
+{
+    "mageos_versions_update": {
+        "column": {
+            "update_id": true,
+            "entity_type": true,
+            "entity_id": true,
+            "name": true,
+            "start_time": true,
+            "end_time": true,
+            "status": true,
+            "data": true,
+            "original": true,
+            "created_at": true
+        },
+        "index": {
+            "MAGEOS_VERSIONS_UPDATE_ENTITY_TYPE_ENTITY_ID": true,
+            "MAGEOS_VERSIONS_UPDATE_STATUS_START_TIME": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

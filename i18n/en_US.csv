@@ -1,0 +1,47 @@
+Save,Save
+"You are not allowed to change this content.","You are not allowed to change this content."
+"You deleted the scheduled update.","You deleted the scheduled update."
+"Add Planned Version","Add Planned Version"
+"Planned Content Version","Planned Content Version"
+"Planned Content Versions","Planned Content Versions"
+"You saved the scheduled update.","You saved the scheduled update."
+"This update no longer exists.","This update no longer exists."
+"A finished update cannot be changed.","A finished update cannot be changed."
+"A name and a start date are required.","A name and a start date are required."
+"The end date must be after the start date.","The end date must be after the start date."
+"Another update of this content is scheduled during this period.","Another update of this content is scheduled during this period."
+"Unknown content type ""%1"".","Unknown content type ""%1""."
+Scheduled,Scheduled
+Active,Active
+Finished,Finished
+Edit,Edit
+Preview,Preview
+Delete,Delete
+"Delete ""%1""","Delete ""%1"""
+"Delete this update? If it is active, the previous content is restored.","Delete this update? If it is active, the previous content is restored."
+"No end (permanent)","No end (permanent)"
+"Save it first to schedule content updates.","Save it first to schedule content updates."
+Update,Update
+Start,Start
+End,End
+Status,Status
+Actions,Actions
+View/Edit,View/Edit
+"No scheduled update.","No scheduled update."
+"Planned Versions","Planned Versions"
+Back,Back
+Schedule,Schedule
+ID,ID
+Type,Type
+"Content ID","Content ID"
+"Update Name","Update Name"
+"Start Date","Start Date"
+"End Date","End Date"
+"Leave empty for a permanent change. With an end date, the previous content comes back at that time.","Leave empty for a permanent change. With an end date, the previous content comes back at that time."
+"Content During the Update","Content During the Update"
+Title,Title
+"Content Heading","Content Heading"
+"Meta Title","Meta Title"
+"Meta Keywords","Meta Keywords"
+"Meta Description","Meta Description"
+"Page / Block","Page / Block"

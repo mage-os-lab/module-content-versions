@@ -1,0 +1,47 @@
+Save,Guardar
+You are not allowed to change this content.,No tiene permiso para modificar este contenido.
+You deleted the scheduled update.,Ha eliminado la actualización programada.
+Add Planned Version,Añadir versión programada
+Planned Content Version,Versión de contenido programada
+Planned Content Versions,Versiones de contenido programadas
+You saved the scheduled update.,Ha guardado la actualización programada.
+This update no longer exists.,Esta actualización ya no existe.
+A finished update cannot be changed.,Una actualización finalizada no se puede modificar.
+A name and a start date are required.,Se requieren un nombre y una fecha de inicio.
+The end date must be after the start date.,La fecha de fin debe ser posterior a la fecha de inicio.
+Another update of this content is scheduled during this period.,Otra actualización de este contenido está programada en este periodo.
+"Unknown content type ""%1"".",Tipo de contenido desconocido «%1».
+Scheduled,Programada
+Active,Activa
+Finished,Finalizada
+Edit,Editar
+Preview,Vista previa
+Delete,Eliminar
+"Delete ""%1""",Eliminar «%1»
+"Delete this update? If it is active, the previous content is restored.","¿Eliminar esta actualización? Si está activa, se restaura el contenido anterior."
+No end (permanent),Sin fin (permanente)
+Save it first to schedule content updates.,Guarde primero para programar actualizaciones del contenido.
+Update,Actualización
+Start,Inicio
+End,Fin
+Status,Estado
+Actions,Acciones
+View/Edit,Ver/Editar
+No scheduled update.,No hay actualizaciones programadas.
+Planned Versions,Versiones programadas
+Back,Volver
+Schedule,Programación
+ID,ID
+Type,Tipo
+Content ID,ID del contenido
+Update Name,Nombre de la actualización
+Start Date,Fecha de inicio
+End Date,Fecha de fin
+"Leave empty for a permanent change. With an end date, the previous content comes back at that time.","Déjelo vacío para un cambio permanente. Con una fecha de fin, el contenido anterior vuelve en ese momento."
+Content During the Update,Contenido durante la actualización
+Title,Título
+Content Heading,Encabezado del contenido
+Meta Title,Meta título
+Meta Keywords,Meta palabras clave
+Meta Description,Meta descripción
+Page / Block,Página / Bloque

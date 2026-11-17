@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MageOS_ContentVersions::update" title="Planned Content Versions" translate="title"
+             module="MageOS_ContentVersions" sortOrder="40" parent="Magento_Backend::content_elements"
+             action="mageos_versions/update" resource="MageOS_ContentVersions::update"/>
+    </menu>
+</config>

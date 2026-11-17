@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="Module">
+    <description>Magento coding standard for this module</description>
+    <file>.</file>
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <arg value="sp"/>
+    <rule ref="Magento2"/>
+    <!-- PSR-12 / PER style: (int) $value -->
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <!-- after the Magento2 rule, which sets its own extension list -->
+    <arg name="extensions" value="php,phtml"/>
+    <!-- Scheduler::overlaps() is a pure date-range rule with no dependencies: nothing to intercept, unit tested without DI -->
+    <rule ref="Magento2.Functions.StaticFunction">
+        <exclude-pattern>Model/Scheduler.php</exclude-pattern>
+    </rule>
+</ruleset>

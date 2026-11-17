@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mageos_versions_update_listing.mageos_versions_update_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>mageos_versions_update_columns</spinner>
+        <deps>
+            <dep>mageos_versions_update_listing.mageos_versions_update_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="mageos_versions_update_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">update_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>MageOS_ContentVersions::update</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="mageos_versions_update_listing_data_source">
+            <settings>
+                <requestFieldName>update_id</requestFieldName>
+                <primaryFieldName>update_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="mageos_versions_update_columns">
+        <column name="update_id" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="name" sortOrder="20">
+            <settings>
+                <label translate="true">Update</label>
+            </settings>
+        </column>
+        <column name="entity_type" sortOrder="30">
+            <settings>
+                <label translate="true">Type</label>
+            </settings>
+        </column>
+        <column name="entity_title" sortOrder="40">
+            <settings>
+                <label translate="true">Page / Block</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="start_time" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="50">
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">Start</label>
+            </settings>
+        </column>
+        <column name="end_time" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date" sortOrder="60">
+            <settings>
+                <dataType>date</dataType>
+                <label translate="true">End</label>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="70">
+            <settings>
+                <options class="MageOS\ContentVersions\Model\Source\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="MageOS\ContentVersions\Ui\Component\Listing\Column\Actions"
+                       sortOrder="100">
+            <settings>
+                <indexField>update_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
