@@ -51,4 +51,42 @@ class SchedulerTest extends TestCase
         $this->assertSame('Live title', $pages->getById($pageId)->getTitle());
         $this->assertSame(Update::STATUS_FINISHED, (int) $update->getStatus());
     }
+
+    /**
+     * The version replaces only its own fields, and a field edited by hand while it was live keeps that edit.
+     */
+    #[DataFixture(
+        PageFixture::class,
+        ['title' => 'Live title', 'content' => 'Live content', 'content_heading' => 'Live heading'],
+        'page'
+    )]
+    public function testEditsMadeWhileTheVersionIsLiveAreKept(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $pageId = (int) DataFixtureStorageManager::getStorage()->get('page')->getId();
+        $update = $objectManager->get(UpdateFactory::class)->create();
+        $update->setData([
+            'entity_type' => 'page',
+            'entity_id' => $pageId,
+            'name' => 'Black Friday',
+            'start_time' => gmdate('Y-m-d H:i:s', time() - 60),
+            'end_time' => gmdate('Y-m-d H:i:s', time() + 3600),
+            'data' => json_encode(['title' => 'Sale title', 'content' => 'Sale content']),
+        ]);
+        $objectManager->get(UpdateResource::class)->save($update);
+        $scheduler = $objectManager->get(Scheduler::class);
+        $pages = $objectManager->get(PageRepositoryInterface::class);
+
+        $scheduler->start($update, gmdate('Y-m-d H:i:s'));
+        $this->assertSame('Live heading', $pages->getById($pageId)->getContentHeading());
+        $pages->save(
+            $pages->getById($pageId)->setContent('Sale content, fixed by hand')->setContentHeading('New heading')
+        );
+
+        $scheduler->finish($update);
+        $page = $pages->getById($pageId);
+        $this->assertSame('Live title', $page->getTitle(), 'untouched field restored');
+        $this->assertSame('Sale content, fixed by hand', $page->getContent(), 'edited field kept');
+        $this->assertSame('New heading', $page->getContentHeading(), 'field outside the version kept');
+    }
 }

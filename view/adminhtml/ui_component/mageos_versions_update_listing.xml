@@ -75,6 +75,11 @@
                 <label translate="true">Status</label>
             </settings>
         </column>
+        <column name="error" sortOrder="80">
+            <settings>
+                <label translate="true">Last Error</label>
+            </settings>
+        </column>
         <actionsColumn name="actions" class="MageOS\ContentVersions\Ui\Component\Listing\Column\Actions"
                        sortOrder="100">
             <settings>

@@ -14,6 +14,8 @@
         <column xsi:type="mediumtext" name="data" nullable="true" comment="Staged field values (JSON)"/>
         <column xsi:type="mediumtext" name="original" nullable="true"
                 comment="Field values replaced when the update started (JSON)"/>
+        <column xsi:type="text" name="error" nullable="true"
+                comment="Why the last run could not start or end the update"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created at"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

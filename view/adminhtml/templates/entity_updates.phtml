@@ -30,13 +30,20 @@ $date = fn (?string $value) => $value
                         <td><?= $escaper->escapeHtml($update->getName()) ?></td>
                         <td><?= $escaper->escapeHtml($date($update->getStartTime())) ?></td>
                         <td><?= $escaper->escapeHtml($date($update->getEndTime())) ?></td>
-                        <td><?= $escaper->escapeHtml($block->getStatusLabel($update)) ?></td>
+                        <td>
+                            <?= $escaper->escapeHtml($block->getStatusLabel($update)) ?>
+                            <?php if ($update->getData('error')): ?>
+                                <div class="message message-error">
+                                    <?= $escaper->escapeHtml($update->getData('error')) ?>
+                                </div>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <a href="<?= $escaper->escapeUrl($block->getActionUrl('edit', $update)) ?>">
                                 <?= $escaper->escapeHtml(__('View/Edit')) ?>
                             </a>
                             &nbsp;|&nbsp;
-                            <a href="<?= $escaper->escapeUrl($block->getPreviewUrl($update)) ?>"
+                            <a href="<?= $escaper->escapeUrl($block->getActionUrl('preview', $update)) ?>"
                                target="_blank" rel="noopener">
                                 <?= $escaper->escapeHtml(__('Preview')) ?>
                             </a>

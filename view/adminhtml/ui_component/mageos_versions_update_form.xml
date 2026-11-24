@@ -158,6 +158,7 @@
                 <dataType>text</dataType>
                 <label translate="true">Title</label>
                 <dataScope>title</dataScope>
+                <notice translate="true">Only the fields you change here are replaced. The others keep the content of the page or block, including later edits.</notice>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace MageOS\ContentVersions\Ui\Component\Listing\Column;
 
-use MageOS\ContentVersions\Model\Preview;
-use MageOS\ContentVersions\Model\UpdateFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -20,8 +18,6 @@ class Actions extends Column
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlInterface $urlBuilder
-     * @param Preview $preview
-     * @param UpdateFactory $updateFactory
      * @param Escaper $escaper
      * @param array<string,mixed> $components
      * @param array<string,mixed> $data
@@ -30,8 +26,6 @@ class Actions extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         private readonly UrlInterface $urlBuilder,
-        private readonly Preview $preview,
-        private readonly UpdateFactory $updateFactory,
         private readonly Escaper $escaper,
         array $components = [],
         array $data = []
@@ -55,7 +49,7 @@ class Actions extends Column
                     'label' => __('Edit'),
                 ],
                 'preview' => [
-                    'href' => $this->preview->url($this->updateFactory->create()->setData($item)),
+                    'href' => $this->urlBuilder->getUrl('mageos_versions/update/preview', $id),
                     'label' => __('Preview'),
                     'target' => '_blank',
                 ],

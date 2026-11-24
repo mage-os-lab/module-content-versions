@@ -9,8 +9,10 @@
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
     <!-- after the Magento2 rule, which sets its own extension list -->
     <arg name="extensions" value="php,phtml"/>
-    <!-- Scheduler::overlaps() is a pure date-range rule with no dependencies: nothing to intercept, unit tested without DI -->
+    <!-- Pure rules with no dependencies, nothing to intercept, unit tested without DI: the date-range and
+         changed-field rules of Scheduler, the link signature of Preview -->
     <rule ref="Magento2.Functions.StaticFunction">
         <exclude-pattern>Model/Scheduler.php</exclude-pattern>
+        <exclude-pattern>Model/Preview.php</exclude-pattern>
     </rule>
 </ruleset>

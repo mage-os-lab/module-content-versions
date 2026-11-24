@@ -11,8 +11,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Data of the update edit form: the update itself plus its staged fields, flattened.
- * A new update starts from the current content of the page/block given by the "type" and "id" parameters.
+ * Data of the update edit form: the update itself, the fields it changes, and the current content of its
+ * page/block for the others. A new update starts from the page/block given by the "type" and "id" parameters.
  */
 class DataProvider extends AbstractDataProvider
 {
@@ -48,7 +48,9 @@ class DataProvider extends AbstractDataProvider
     }
 
     /**
-     * The update row, or a new one prefilled with the live content; values rejected by a failed save win.
+     * The update row over the live content, or the live content alone for a new one.
+     *
+     * Values rejected by a failed save win.
      *
      * @return array<int|string, array<string, mixed>>
      */
@@ -59,19 +61,19 @@ class DataProvider extends AbstractDataProvider
         }
         $id = (int) $this->request->getParam($this->getRequestFieldName());
         $update = $id ? $this->collection->getItemById($id) : null;
-        if ($update) {
-            $row = $update->getStagedData() + $update->getData();
-            unset($row['data'], $row['original']);
-        } else {
-            $row = ['entity_type' => $this->entityType(), 'entity_id' => (int) $this->request->getParam('id')];
-            try {
-                $entity = $this->entities->load($row['entity_type'], $row['entity_id']);
-                foreach (Entities::FIELDS[$row['entity_type']] as $field) {
-                    $row[$field] = $entity->getData($field);
-                }
-            } catch (NoSuchEntityException $e) {
-                $row = [];
+        $row = $update
+            ? array_diff_key($update->getData(), ['data' => 1, 'original' => 1])
+            : ['entity_type' => $this->entityType(), 'entity_id' => (int) $this->request->getParam('id')];
+        try {
+            $entity = $this->entities->load((string) $row['entity_type'], (int) $row['entity_id']);
+            foreach (Entities::FIELDS[$row['entity_type']] as $field) {
+                $row[$field] = $entity->getData($field);
             }
+        } catch (NoSuchEntityException $e) {
+            $row = $update ? $row : [];
+        }
+        if ($update) {
+            $row = $update->getStagedData() + $row;
         }
         $rejected = $this->dataPersistor->get('mageos_versions_update');
         if ($rejected) {

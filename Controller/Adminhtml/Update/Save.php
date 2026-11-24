@@ -19,7 +19,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Saves an update; an active one goes live again right away.
+ * Saves an update with the fields it changes; an active one goes live again right away.
  */
 class Save extends Action implements HttpPostActionInterface
 {
@@ -57,10 +57,12 @@ class Save extends Action implements HttpPostActionInterface
             $this->resource->load($update, (int) $post['update_id']);
         }
         try {
+            $previous = $update->getStagedData();
             $this->fill($update, $post);
-            $this->resource->save($update);
             if ((int) $update->getStatus() === Update::STATUS_ACTIVE) {
-                $this->scheduler->reapply($update);
+                $this->scheduler->reapply($update, $previous);
+            } else {
+                $this->resource->save($update);
             }
             $this->messageManager->addSuccessMessage(__('You saved the scheduled update.'));
             return $redirect->setPath(
@@ -97,7 +99,7 @@ class Save extends Action implements HttpPostActionInterface
             $update->setEntityType((string) ($post['entity_type'] ?? ''))->setEntityId((int) ($post['entity_id'] ?? 0));
         }
         $type = (string) $update->getEntityType();
-        $this->entities->load($type, (int) $update->getEntityId());
+        $entity = $this->entities->load($type, (int) $update->getEntityId());
         if (!$this->_authorization->isAllowed(Entities::ACL[$type])) {
             throw new LocalizedException(__('You are not allowed to change this content.'));
         }
@@ -118,9 +120,14 @@ class Save extends Action implements HttpPostActionInterface
             throw new LocalizedException(__('Another update of this content is scheduled during this period.'));
         }
 
-        $staged = [];
-        foreach (Entities::FIELDS[$type] as $field) {
-            $staged[$field] = (string) ($post[$field] ?? '');
+        // Only what the editor changed is stored, so later edits of the other fields are not replaced. An active
+        // update is compared with the content it replaced, as the live content already holds its values.
+        $staged = Scheduler::changed(
+            array_filter(array_intersect_key($post, array_flip(Entities::FIELDS[$type])), 'is_scalar'),
+            $update->getOriginalData() + $entity->getData()
+        );
+        if (!$staged) {
+            throw new LocalizedException(__('Change at least one field of the content.'));
         }
         $update->setName($name)->setStartTime($start)->setEndTime($end)->setData('data', json_encode($staged));
     }

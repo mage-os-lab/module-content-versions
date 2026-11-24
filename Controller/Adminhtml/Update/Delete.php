@@ -11,6 +11,7 @@ use MageOS\ContentVersions\Model\UpdateFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Deletes an update; an active one first puts the previous content back.
@@ -45,11 +46,16 @@ class Delete extends Action implements HttpPostActionInterface
         if ($update->getId() && (!$acl || !$this->_authorization->isAllowed($acl))) {
             $this->messageManager->addErrorMessage(__('You are not allowed to change this content.'));
         } elseif ($update->getId()) {
-            if ((int) $update->getStatus() === Update::STATUS_ACTIVE) {
-                $this->scheduler->finish($update);
+            try {
+                if ((int) $update->getStatus() === Update::STATUS_ACTIVE) {
+                    $this->scheduler->finish($update);
+                }
+                $this->resource->delete($update);
+                $this->messageManager->addSuccessMessage(__('You deleted the scheduled update.'));
+            } catch (LocalizedException $e) {
+                // The previous content could not be put back: the update stays, with its content live.
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
-            $this->resource->delete($update);
-            $this->messageManager->addSuccessMessage(__('You deleted the scheduled update.'));
         }
         return $this->resultRedirectFactory->create()->setRefererOrBaseUrl();
     }

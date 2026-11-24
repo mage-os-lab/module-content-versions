@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace MageOS\ContentVersions\Block\Adminhtml;
 
-use MageOS\ContentVersions\Model\Preview;
 use MageOS\ContentVersions\Model\ResourceModel\Update\CollectionFactory;
 use MageOS\ContentVersions\Model\Source\Status;
 use MageOS\ContentVersions\Model\Update;
@@ -23,14 +22,12 @@ class EntityUpdates extends Template
     /**
      * @param Context $context
      * @param CollectionFactory $updates
-     * @param Preview $preview
      * @param Status $status
      * @param array<string,mixed> $data
      */
     public function __construct(
         Context $context,
         private readonly CollectionFactory $updates,
-        private readonly Preview $preview,
         private readonly Status $status,
         array $data = []
     ) {
@@ -72,7 +69,7 @@ class EntityUpdates extends Template
     }
 
     /**
-     * URL of an update admin action (edit, delete).
+     * URL of an update admin action (edit, preview, delete).
      *
      * @param string $action
      * @param Update $update
@@ -80,16 +77,6 @@ class EntityUpdates extends Template
     public function getActionUrl(string $action, Update $update): string
     {
         return $this->getUrl('mageos_versions/update/' . $action, ['update_id' => $update->getId()]);
-    }
-
-    /**
-     * Signed storefront preview URL of the update.
-     *
-     * @param Update $update
-     */
-    public function getPreviewUrl(Update $update): string
-    {
-        return $this->preview->url($update);
     }
 
     /**
