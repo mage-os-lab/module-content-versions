@@ -2,7 +2,9 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-11-24
+
+A planned version replaces only the fields it changes, so edits made around it are kept, and a version that fails no longer blocks the others.
 
 Upgrade: preview links made before this version stop working; click *Preview* again to get a new one. Versions planned before this version still replace every field: open and save them once to keep only the fields they change.
 
