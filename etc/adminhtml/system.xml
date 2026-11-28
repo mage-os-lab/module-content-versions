@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cms">
+            <group id="mageos_content_versions" translate="label" sortOrder="210" showInDefault="1"
+                   showInWebsite="0" showInStore="0">
+                <label>Content Versions</label>
+                <field id="revisions" translate="label comment" type="text" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Revisions Kept per Page or Block</label>
+                    <comment>Each save of a CMS page or block keeps a revision of its content. Beyond this number, the oldest revisions are deleted. 0 records no revision.</comment>
+                    <validate>required-entry validate-digits</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

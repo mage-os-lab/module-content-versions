@@ -10,7 +10,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Edit an update (update_id), or schedule a new one for a page/block (type + id).
+ * Edit an update (update_id), or schedule a new one for a page/block (type + id) or as a copy of another (from).
  */
 class Edit extends Action implements HttpGetActionInterface
 {
@@ -22,7 +22,8 @@ class Edit extends Action implements HttpGetActionInterface
     public function execute()
     {
         $isNew = !$this->getRequest()->getParam('update_id');
-        if ($isNew && !isset(Entities::FIELDS[(string) $this->getRequest()->getParam('type')])) {
+        $type = (string) $this->getRequest()->getParam('type');
+        if ($isNew && !$this->getRequest()->getParam('from') && !isset(Entities::FIELDS[$type])) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
         $page = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

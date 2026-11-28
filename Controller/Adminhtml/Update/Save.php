@@ -32,6 +32,7 @@ class Save extends Action implements HttpPostActionInterface
      * @param Scheduler $scheduler
      * @param DataPersistorInterface $dataPersistor
      * @param UpdateResource $resource
+     * @param HttpRequest $request
      */
     public function __construct(
         Context $context,
@@ -39,7 +40,8 @@ class Save extends Action implements HttpPostActionInterface
         private readonly Entities $entities,
         private readonly Scheduler $scheduler,
         private readonly DataPersistorInterface $dataPersistor,
-        private readonly UpdateResource $resource
+        private readonly UpdateResource $resource,
+        private readonly HttpRequest $request
     ) {
         parent::__construct($context);
     }
@@ -49,8 +51,7 @@ class Save extends Action implements HttpPostActionInterface
      */
     public function execute()
     {
-        $request = $this->getRequest();
-        $post = $request instanceof HttpRequest ? (array) $request->getPostValue() : [];
+        $post = (array) $this->request->getPostValue();
         $redirect = $this->resultRedirectFactory->create();
         $update = $this->updateFactory->create();
         if (!empty($post['update_id'])) {

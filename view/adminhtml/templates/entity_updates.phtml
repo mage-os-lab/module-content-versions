@@ -48,6 +48,29 @@ $date = fn (?string $value) => $value
                                 <?= $escaper->escapeHtml(__('Preview')) ?>
                             </a>
                             &nbsp;|&nbsp;
+                            <a href="<?= $escaper->escapeUrl($block->getDuplicateUrl($update)) ?>">
+                                <?= $escaper->escapeHtml(__('Duplicate')) ?>
+                            </a>
+                            <?php if ($block->isFinished($update)): ?>
+                                &nbsp;|&nbsp;
+                                <form method="post"
+                                      action="<?= $escaper->escapeUrl($block->getActionUrl('restore', $update)) ?>"
+                                      id="version-restore-<?= (int) $update->getId() ?>" style="display:inline">
+                                    <input type="hidden" name="form_key"
+                                           value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+                                    <button type="submit" class="action-default">
+                                        <?= $escaper->escapeHtml(__('Restore')) ?>
+                                    </button>
+                                </form>
+                                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                    'onsubmit',
+                                    'if (!confirm(' . json_encode(
+                                        (string) __('Put the content of this version live again now, with no end date?')
+                                    ) . ')) { event.preventDefault(); }',
+                                    '#version-restore-' . (int) $update->getId()
+                                ) ?>
+                            <?php endif; ?>
+                            &nbsp;|&nbsp;
                             <form method="post"
                                   action="<?= $escaper->escapeUrl($block->getActionUrl('delete', $update)) ?>"
                                   id="version-delete-<?= (int) $update->getId() ?>" style="display:inline">

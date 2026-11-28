@@ -11,7 +11,9 @@ Schedules temporary or permanent content versions of CMS pages and CMS blocks, w
 - An update that cannot be applied does not block the others: it is retried every minute, and the reason shows in the *Last Error* column and in the log.
 - *Preview* opens the storefront with the scheduled content through a signed link, without changing the live content or the full page cache. It opens in a store view the page or block is assigned to, and the link works for 7 days.
 - Two updates of the same content cannot overlap. Editing an active update goes live immediately; deleting it restores the previous content.
-- All updates are listed under *Content > Elements > Planned Content Versions*.
+- All updates are listed under *Content > Elements > Planned Content Versions*, with a *Calendar View* button: a month calendar of the versions live each day (admin time zone, first day of the week from the locale settings).
+- A finished version can be *Restored*: its content goes live again now, for good. Any version can be *Duplicated*: the form opens with its name and content, to plan it again on new dates.
+- Each save of a page or block (from the admin, the cron, an import or the API) keeps a revision of its content fields. The *Revisions* section of the edit form lists them: *Compare with Current Content* shows the fields that differ side by side, *Restore* puts a revision back. Only the last revisions are kept (20 by default, configurable).
 
 Limitations:
 
@@ -19,6 +21,10 @@ Limitations:
 - A field counts as changed when its text differs from the page or block: an editor that reformats the HTML on save makes the content field part of the update.
 - Saving an active update puts its fields live again, over an edit made directly on the page or block.
 - The preview opens in the first store view of a page or block assigned to several.
+- A revision keeps the content fields only (title, content, and for pages content heading and meta fields), not the status, URL key or store views. It does not record who saved it.
+- The comparison shows each changed field in full, side by side, not a line-by-line diff.
+- A save that changes none of these fields adds no revision. Deleting a page or block, one by one or from the grid's mass action, deletes its revisions and its planned versions, upcoming, live or finished: they no longer show in the grid or the calendar. A version whose page or block was deleted another way (directly in the database) is closed by the cron without error.
+- Restoring a version or a revision while another version of the same content is live: the restored fields stay when that version ends, as for any edit made directly on the page or block.
 
 ## Compatibility
 
@@ -34,7 +40,7 @@ The module has no storefront template, checkout or catalog code; the preview is 
 | Loki Checkout | Not applicable: nothing in the checkout |
 | Elasticsuite | Not applicable: nothing in search or catalog |
 
-The preview's store view selection (`___store` parameter) was written from the core source and not run on a multi-store installation.
+The preview's store view selection (`___store` parameter) was written from the core source and not run on a multi-store installation. The 1.2 features (restore and duplicate, revisions, calendar, deletion of the planned versions of a deleted page or block) are admin-only; they were checked by static analysis and unit tests, not yet run in a store.
 
 ## Installation
 
@@ -47,13 +53,17 @@ bin/magento setup:upgrade
 
 ## Configuration
 
-No configuration. Admin pages and command:
+*Stores > Configuration > General > Content Management > Content Versions*:
 
-- *Planned Versions* section on the CMS page and CMS block edit forms.
-- *Content > Elements > Planned Content Versions*: all updates, with the last error of those that could not be applied.
+- *Revisions Kept per Page or Block* (`cms/mageos_content_versions/revisions`, default scope, default `20`): beyond this number, the oldest revisions of a page or block are deleted at its next save. `0` records no revision (existing ones are kept until the next save with a non-zero value).
+
+Admin pages and command:
+
+- *Planned Versions* and *Revisions* sections on the CMS page and CMS block edit forms.
+- *Content > Elements > Planned Content Versions*: all updates, with the last error of those that could not be applied; *Calendar View* for the month calendar.
 - `bin/magento content-versions:run`: starts and ends the due updates now, as the cron job does. It prints the updates that failed and exits with an error code if there is any.
 
-Viewing updates needs the *Planned Content Versions* ACL resource. Saving or deleting an update also needs the right to save that content: *Save Page* for pages, *Blocks* for blocks.
+Viewing updates, the calendar and the revision comparison needs the *Planned Content Versions* ACL resource; without it, the *Planned Versions* and *Revisions* sections are not shown on the page and block edit forms. Saving, deleting or restoring an update, and restoring a revision, also need the right to save that content: *Save Page* for pages, *Blocks* for blocks.
 
 ## Getting started
 
@@ -70,13 +80,17 @@ Viewing updates needs the *Planned Content Versions* ACL resource. Saving or del
 
 ![Planned Content Versions grid](docs/images/grid.png)
 
+5. Once finished, *Restore* puts the version live again, *Duplicate* plans it again on new dates.
+6. To go back to an earlier state of a page or block, open its *Revisions* section, compare a revision with the current content, then restore it.
+
 ## Troubleshooting
 
 - **Nothing happens**: Magento cron must run (`bin/magento cron:run` every minute from the system crontab). Check `cron_schedule` for `mageos_content_versions_run`.
 - **"You are not allowed to change this content"**: the admin role lacks *Save Page* or *Blocks*.
-- **An update does not start or end**: see the *Last Error* column of *Content > Elements > Planned Content Versions*, or run `bin/magento content-versions:run`. The reason is also logged once in `var/log/system.log`. The update is retried every minute until it passes.
+- **An update does not start or end**: see the *Last Error* column of *Content > Elements > Planned Content Versions*, or run `bin/magento content-versions:run`. The reason is logged once in `var/log/system.log` (and `exception.log`), and again only if it changes or after the update was applied once. The update is retried every minute until it passes.
 - **"The previous planned version of this content is still active"**: the update before this one could not be ended; fix its error first, this one then starts by itself.
 - **A field was not restored at the end**: it was edited on the page or block while the update was live, and that edit is kept.
+- **No revision is recorded**: *Revisions Kept per Page or Block* is `0`, or the save changed none of the content fields.
 - **A preview link no longer works**: it is older than 7 days, was made before version 1.1, or its update is finished; click *Preview* again.
 
 ## More

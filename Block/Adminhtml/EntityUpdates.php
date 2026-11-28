@@ -35,6 +35,14 @@ class EntityUpdates extends Template
     }
 
     /**
+     * Nothing for admin roles without access to planned versions and revisions: their actions would be refused.
+     */
+    protected function _toHtml(): string
+    {
+        return $this->_authorization->isAllowed('MageOS_ContentVersions::update') ? parent::_toHtml() : '';
+    }
+
+    /**
      * ID of the page or block being edited, 0 when it is new.
      */
     public function getEntityId(): int
@@ -69,7 +77,7 @@ class EntityUpdates extends Template
     }
 
     /**
-     * URL of an update admin action (edit, preview, delete).
+     * URL of an update admin action (edit, preview, restore, delete).
      *
      * @param string $action
      * @param Update $update
@@ -77,6 +85,26 @@ class EntityUpdates extends Template
     public function getActionUrl(string $action, Update $update): string
     {
         return $this->getUrl('mageos_versions/update/' . $action, ['update_id' => $update->getId()]);
+    }
+
+    /**
+     * URL to schedule a new update as a copy of this one.
+     *
+     * @param Update $update
+     */
+    public function getDuplicateUrl(Update $update): string
+    {
+        return $this->getUrl('mageos_versions/update/edit', ['from' => $update->getId()]);
+    }
+
+    /**
+     * Whether the update is finished, so it can be restored.
+     *
+     * @param Update $update
+     */
+    public function isFinished(Update $update): bool
+    {
+        return (int) $update->getStatus() === Update::STATUS_FINISHED;
     }
 
     /**

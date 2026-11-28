@@ -1,0 +1,57 @@
+<?php
+declare(strict_types=1);
+
+/** @var \MageOS\ContentVersions\Block\Adminhtml\RevisionCompare $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$revision = $block->getRevision();
+$differences = $revision ? $block->getDifferences($revision) : null;
+?>
+<p>
+    <a class="action-default" href="<?= $escaper->escapeUrl($block->getBackUrl($revision)) ?>">
+        <?= $escaper->escapeHtml(__('Back')) ?>
+    </a>
+</p>
+<?php if ($revision === null): ?>
+    <p><?= $escaper->escapeHtml(__('This revision no longer exists.')) ?></p>
+<?php elseif ($differences === null): ?>
+    <p><?= $escaper->escapeHtml(__('The page or block of this revision no longer exists.')) ?></p>
+<?php else: ?>
+    <p>
+        <?= $escaper->escapeHtml(__(
+            'Revision saved at %1, compared with the current content.',
+            $block->formatDate($revision['created_at'], \IntlDateFormatter::MEDIUM, true)
+        )) ?>
+    </p>
+    <?php if (!$differences): ?>
+        <p><?= $escaper->escapeHtml(__('This revision is the same as the current content.')) ?></p>
+    <?php else: ?>
+        <table class="data-grid" style="table-layout:fixed">
+            <thead>
+                <tr>
+                    <th class="data-grid-th" scope="col" style="width:12rem">
+                        <?= $escaper->escapeHtml(__('Field')) ?>
+                    </th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('This Revision')) ?></th>
+                    <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Current Content')) ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($differences as $field => [$old, $current]): ?>
+                    <tr>
+                        <th scope="row"><?= $escaper->escapeHtml($block->getFieldLabel($field)) ?></th>
+                        <td><pre style="white-space:pre-wrap"><?= $escaper->escapeHtml((string) $old) ?></pre></td>
+                        <td><pre style="white-space:pre-wrap"><?= $escaper->escapeHtml((string) $current) ?></pre></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <form method="post" style="margin-top:1.5rem"
+              action="<?= $escaper->escapeUrl($block->getRestoreUrl($revision['revision_id'])) ?>">
+            <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+            <button type="submit" class="action-primary">
+                <?= $escaper->escapeHtml(__('Restore This Revision')) ?>
+            </button>
+        </form>
+    <?php endif; ?>
+<?php endif; ?>

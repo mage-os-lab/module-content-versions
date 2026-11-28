@@ -18,4 +18,21 @@
             </htmlContent>
         </container>
     </fieldset>
+    <fieldset name="mageos_versions_revisions" sortOrder="2">
+        <settings>
+            <collapsible>true</collapsible>
+            <opened>false</opened>
+            <label translate="true">Revisions</label>
+        </settings>
+        <container name="mageos_versions_revisions_container">
+            <htmlContent name="html_content">
+                <block name="mageos_versions_block_revisions"
+                       class="MageOS\ContentVersions\Block\Adminhtml\EntityRevisions">
+                    <arguments>
+                        <argument name="entity_type" xsi:type="string">block</argument>
+                    </arguments>
+                </block>
+            </htmlContent>
+        </container>
+    </fieldset>
 </form>

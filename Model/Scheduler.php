@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace MageOS\ContentVersions\Model;
 
 use MageOS\ContentVersions\Model\ResourceModel\Update as UpdateResource;
+use MageOS\ContentVersions\Model\ResourceModel\Update\Collection;
 use MageOS\ContentVersions\Model\ResourceModel\Update\CollectionFactory;
 use Magento\Cms\Model\Block;
 use Magento\Cms\Model\Page;
@@ -145,6 +146,42 @@ class Scheduler
                 $this->entities->write($entity, $values);
             }
         });
+    }
+
+    /**
+     * Puts content back on a page / block now, for good: a version live on it keeps that content when it ends.
+     *
+     * @param string $type
+     * @param int $entityId
+     * @param array<string,mixed> $values
+     * @throws NoSuchEntityException when the page / block was deleted
+     */
+    public function restore(string $type, int $entityId, array $values): void
+    {
+        $entity = $this->entities->load($type, $entityId);
+        $active = $this->active($type, $entityId);
+        $this->transaction(function () use ($entity, $active, $values): void {
+            foreach ($active as $update) {
+                $this->connection()->update(
+                    $this->resource->getMainTable(),
+                    ['original' => json_encode(self::kept($update->getOriginalData(), $values))],
+                    ['update_id = ?' => (int) $update->getId(), 'status = ?' => Update::STATUS_ACTIVE]
+                );
+            }
+            $this->entities->write($entity, $values);
+        });
+    }
+
+    /**
+     * The replaced values of a live version once content was restored: restored fields are put back as restored.
+     *
+     * @param array<string,mixed> $original
+     * @param array<string,mixed> $restored
+     * @return array<string, mixed>
+     */
+    public static function kept(array $original, array $restored): array
+    {
+        return array_replace($original, array_intersect_key($restored, $original));
     }
 
     /**
@@ -290,12 +327,23 @@ class Scheduler
      */
     private function hasActive(Update $update): bool
     {
-        return $this->updates->create()
-            ->addFieldToFilter('entity_type', $update->getEntityType())
-            ->addFieldToFilter('entity_id', ['eq' => (int) $update->getEntityId()])
-            ->addFieldToFilter('status', ['eq' => Update::STATUS_ACTIVE])
+        return $this->active((string) $update->getEntityType(), (int) $update->getEntityId())
             ->addFieldToFilter('update_id', ['neq' => (int) $update->getId()])
             ->getSize() > 0;
+    }
+
+    /**
+     * The live updates of a page / block.
+     *
+     * @param string $type
+     * @param int $entityId
+     */
+    private function active(string $type, int $entityId): Collection
+    {
+        return $this->updates->create()
+            ->addFieldToFilter('entity_type', $type)
+            ->addFieldToFilter('entity_id', ['eq' => $entityId])
+            ->addFieldToFilter('status', ['eq' => Update::STATUS_ACTIVE]);
     }
 
     /**
@@ -359,12 +407,14 @@ class Scheduler
      */
     private function attempt(Update $update, callable $apply): ?string
     {
+        // Read before applying: claiming the update clears its error, and the rollback does not undo that on the model.
+        $previous = $update->getData('error');
         try {
             $apply();
             return null;
         } catch (Throwable $e) {
             $error = $e->getMessage();
-            if ($error !== $update->getData('error')) {
+            if ($error !== $previous) {
                 $this->logger->error(
                     sprintf('Planned content version #%d could not be applied: %s', $update->getId(), $error),
                     ['exception' => $e]

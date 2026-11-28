@@ -7,6 +7,12 @@
         </item>
     </argument>
     <settings>
+        <buttons>
+            <button name="calendar">
+                <url path="*/*/calendar"/>
+                <label translate="true">Calendar View</label>
+            </button>
+        </buttons>
         <spinner>mageos_versions_update_columns</spinner>
         <deps>
             <dep>mageos_versions_update_listing.mageos_versions_update_listing_data_source</dep>

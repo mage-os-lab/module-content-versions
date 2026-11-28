@@ -10,8 +10,11 @@
     <!-- after the Magento2 rule, which sets its own extension list -->
     <arg name="extensions" value="php,phtml"/>
     <!-- Pure rules with no dependencies, nothing to intercept, unit tested without DI: the date-range and
-         changed-field rules of Scheduler, the link signature of Preview -->
+         changed-field rules of Scheduler, the link signature of Preview, the month grid of Calendar, the revision
+         snapshot and comparison of Revisions -->
     <rule ref="Magento2.Functions.StaticFunction">
+        <exclude-pattern>Model/Calendar.php</exclude-pattern>
+        <exclude-pattern>Model/Revisions.php</exclude-pattern>
         <exclude-pattern>Model/Scheduler.php</exclude-pattern>
         <exclude-pattern>Model/Preview.php</exclude-pattern>
     </rule>
