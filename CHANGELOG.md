@@ -2,9 +2,11 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.2.0] - 2026-11-28
 
-Revisions are recorded from the first save after the upgrade: content saved before has none. The number kept is set in *Stores > Configuration > General > Content Management > Content Versions*.
+CMS pages and blocks keep revisions to compare and restore, finished planned versions can be restored or duplicated, and planned versions get a calendar view.
+
+Upgrade: revisions are recorded from the first save after the update: content saved before has none. The number kept is set in *Stores > Configuration > General > Content Management > Content Versions*. The update deletes the planned versions left by pages and blocks deleted before.
 
 ### Added
 
