@@ -30,4 +30,20 @@
             <column name="start_time"/>
         </index>
     </table>
+    <table name="mageos_versions_revision" resource="default" engine="innodb"
+           comment="Content of a CMS page or block at each save">
+        <column xsi:type="int" name="revision_id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="entity_type" length="16" nullable="false" comment="page or block"/>
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" comment="CMS page or block ID"/>
+        <column xsi:type="mediumtext" name="data" nullable="true" comment="Field values after the save (JSON)"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Saved at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="revision_id"/>
+        </constraint>
+        <index referenceId="MAGEOS_VERSIONS_REVISION_ENTITY_TYPE_ENTITY_ID" indexType="btree">
+            <column name="entity_type"/>
+            <column name="entity_id"/>
+        </index>
+    </table>
 </schema>

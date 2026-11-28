@@ -2,6 +2,24 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+Revisions are recorded from the first save after the upgrade: content saved before has none. The number kept is set in *Stores > Configuration > General > Content Management > Content Versions*.
+
+### Added
+
+- *Restore* on a finished planned version: its content goes live again now, with no end date. Restored while another version is live, it stays live when that version ends, even if both have the same content; restoring a revision does the same.
+- *Duplicate* on a planned version: opens a new version with its name and content, to plan it on other dates.
+- A revision of the content of a CMS page or block at each save, from the admin, the cron, an import or the API. The *Revisions* section of the edit form lists them, compares one with the current content field by field and restores it. Deleting a page or block deletes its revisions. The *Planned Versions* and *Revisions* sections are hidden from admin roles without the *Planned Content Versions* resource.
+- *Revisions Kept per Page or Block* setting (20 by default; 0 records none): older revisions are deleted.
+- *Calendar View* of the planned versions, by month, from *Content > Elements > Planned Content Versions*.
+- Translations of the new texts in French, German, Spanish and Italian.
+
+### Fixed
+
+- Deleting a CMS page or block, one by one or from the grid's mass action, left its planned versions in the grid and the calendar. They are now deleted with it, whatever their status, and the upgrade deletes those left by pages and blocks deleted before.
+- A planned version that could not be applied was logged again at every cron run. The same error is now logged once; it is logged again if the error changes or after the version was applied.
+
 ## [1.1.0] - 2026-11-24
 
 A planned version replaces only the fields it changes, so edits made around it are kept, and a version that fails no longer blocks the others.

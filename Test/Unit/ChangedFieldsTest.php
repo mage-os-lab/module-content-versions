@@ -84,4 +84,19 @@ class ChangedFieldsTest extends TestCase
         $this->assertSame([], $values);
         $this->assertSame([], $original);
     }
+
+    /**
+     * A version restored while another one is live, with the same content, stays live when that one ends.
+     */
+    public function testRestoreDuringALiveVersionWithTheSameContentStaysLive(): void
+    {
+        $staged = ['content' => '<p>A-PROMO</p>'];
+        $restored = ['title' => 'Promo', 'content' => '<p>A-PROMO</p>'];
+        $original = Scheduler::kept(['content' => '<p>Before</p>'], $restored);
+        $this->assertSame(['content' => '<p>A-PROMO</p>'], $original);
+        $this->assertSame(
+            ['content' => '<p>A-PROMO</p>'],
+            Scheduler::restorable($original, $staged, $restored)
+        );
+    }
 }

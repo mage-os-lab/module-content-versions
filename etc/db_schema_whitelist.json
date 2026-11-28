@@ -20,5 +20,20 @@
         "constraint": {
             "PRIMARY": true
         }
+    },
+    "mageos_versions_revision": {
+        "column": {
+            "revision_id": true,
+            "entity_type": true,
+            "entity_id": true,
+            "data": true,
+            "created_at": true
+        },
+        "index": {
+            "MAGEOS_VERSIONS_REVISION_ENTITY_TYPE_ENTITY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
 }

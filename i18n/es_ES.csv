@@ -49,3 +49,33 @@ The previous planned version of this content is still active: it could not be en
 Change at least one field of the content.,Modifique al menos un campo del contenido.
 Last Error,Último error
 "Only the fields you change here are replaced. The others keep the content of the page or block, including later edits.","Solo se sustituyen los campos que modifique aquí. Los demás conservan el contenido de la página o del bloque, incluidos sus cambios posteriores."
+Content,Contenido
+Compare Revision,Comparar la revisión
+This revision no longer exists.,Esta revisión ya no existe.
+You restored the revision.,Ha restaurado la revisión.
+Planned Versions Calendar,Calendario de versiones programadas
+Only a finished version can be restored.,Solo se puede restaurar una versión finalizada.
+"The content of ""%1"" is live again.",El contenido de «%1» vuelve a estar publicado.
+Duplicate,Duplicar
+"Put the content of this version live again now, with no end date?","¿Volver a publicar ahora el contenido de esta versión, sin fecha de fin?"
+"Restore ""%1""",Restaurar «%1»
+Restore,Restaurar
+Back to the List,Volver a la lista
+Next Month,Mes siguiente
+Previous Month,Mes anterior
+Compare with Current Content,Comparar con el contenido actual
+No revision yet: one is kept at each save.,Todavía no hay revisiones: se guarda una en cada guardado.
+Restore this revision? Unsaved changes in this form are lost.,¿Restaurar esta revisión? Se perderán los cambios no guardados de este formulario.
+Saved At,Guardada el
+Current Content,Contenido actual
+Field,Campo
+Restore This Revision,Restaurar esta revisión
+"Revision saved at %1, compared with the current content.","Revisión guardada el %1, comparada con el contenido actual."
+The page or block of this revision no longer exists.,La página o el bloque de esta revisión ya no existe.
+This Revision,Esta revisión
+This revision is the same as the current content.,Esta revisión es idéntica al contenido actual.
+Revisions,Revisiones
+Calendar View,Vista de calendario
+Content Versions,Versiones de contenido
+Revisions Kept per Page or Block,Revisiones conservadas por página o bloque
+"Each save of a CMS page or block keeps a revision of its content. Beyond this number, the oldest revisions are deleted. 0 records no revision.","Cada guardado de una página o un bloque CMS conserva una revisión de su contenido. Por encima de este número, se eliminan las revisiones más antiguas. 0 no registra ninguna revisión."

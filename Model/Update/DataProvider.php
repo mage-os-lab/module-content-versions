@@ -5,6 +5,7 @@ namespace MageOS\ContentVersions\Model\Update;
 
 use MageOS\ContentVersions\Model\Entities;
 use MageOS\ContentVersions\Model\ResourceModel\Update\CollectionFactory;
+use MageOS\ContentVersions\Model\Update;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -12,7 +13,8 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Data of the update edit form: the update itself, the fields it changes, and the current content of its
- * page/block for the others. A new update starts from the page/block given by the "type" and "id" parameters.
+ * page/block for the others. A new update starts from the page/block given by the "type" and "id" parameters, or
+ * from a copy of the name and fields of the update given by the "from" parameter.
  */
 class DataProvider extends AbstractDataProvider
 {
@@ -61,9 +63,16 @@ class DataProvider extends AbstractDataProvider
         }
         $id = (int) $this->request->getParam($this->getRequestFieldName());
         $update = $id ? $this->collection->getItemById($id) : null;
-        $row = $update
-            ? array_diff_key($update->getData(), ['data' => 1, 'original' => 1])
-            : ['entity_type' => $this->entityType(), 'entity_id' => (int) $this->request->getParam('id')];
+        $source = $update ? null : $this->source();
+        $row = match (true) {
+            $update !== null => array_diff_key($update->getData(), ['data' => 1, 'original' => 1]),
+            $source !== null => [
+                'entity_type' => $source->getEntityType(),
+                'entity_id' => (int) $source->getEntityId(),
+                'name' => $source->getName(),
+            ],
+            default => ['entity_type' => $this->entityType(), 'entity_id' => (int) $this->request->getParam('id')],
+        };
         try {
             $entity = $this->entities->load((string) $row['entity_type'], (int) $row['entity_id']);
             foreach (Entities::FIELDS[$row['entity_type']] as $field) {
@@ -72,8 +81,9 @@ class DataProvider extends AbstractDataProvider
         } catch (NoSuchEntityException $e) {
             $row = $update ? $row : [];
         }
-        if ($update) {
-            $row = $update->getStagedData() + $row;
+        $copied = $update ?? $source;
+        if ($copied) {
+            $row = $copied->getStagedData() + $row;
         }
         $rejected = $this->dataPersistor->get('mageos_versions_update');
         if ($rejected) {
@@ -104,6 +114,17 @@ class DataProvider extends AbstractDataProvider
     {
         $id = (int) $this->request->getParam($this->getRequestFieldName());
         $update = $id ? $this->collection->getItemById($id) : null;
+        $update ??= $this->source();
         return (string) ($update ? $update->getEntityType() : $this->request->getParam('type'));
+    }
+
+    /**
+     * The update copied by a new one ("from" parameter), if any.
+     */
+    private function source(): ?Update
+    {
+        $from = (int) $this->request->getParam('from');
+        $source = $from ? $this->collection->getItemById($from) : null;
+        return $source instanceof Update ? $source : null;
     }
 }

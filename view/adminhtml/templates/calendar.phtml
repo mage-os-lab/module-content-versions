@@ -1,0 +1,60 @@
+<?php
+declare(strict_types=1);
+
+/** @var \MageOS\ContentVersions\Block\Adminhtml\Calendar $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$css = '.mageos-versions-calendar{table-layout:fixed;width:100%}'
+    . '.mageos-versions-calendar td{vertical-align:top;height:7rem;border:1px solid #d6d6d6;padding:.4rem}'
+    . '.mageos-versions-calendar td.other-month{background:#f8f8f8;color:#999}'
+    . '.mageos-versions-calendar .version{display:block;margin-top:.3rem;padding:.1rem .3rem;border-radius:2px;'
+    . 'background:#e5f7fe;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+    . '.mageos-versions-calendar .version.active{background:#e5efe5}'
+    . '.mageos-versions-calendar .version.finished{background:#f0f0f0;color:#666}';
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('style', [], $css, false) ?>
+<div class="page-actions-buttons" style="margin-bottom:1rem">
+    <a class="action-default" href="<?= $escaper->escapeUrl($block->getGridUrl()) ?>">
+        <?= $escaper->escapeHtml(__('Back to the List')) ?>
+    </a>
+</div>
+<h2>
+    <a href="<?= $escaper->escapeUrl($block->getMonthUrl('-1 month')) ?>"
+       title="<?= $escaper->escapeHtmlAttr(__('Previous Month')) ?>">&larr;</a>
+    <?= $escaper->escapeHtml($block->getMonthTitle()) ?>
+    <a href="<?= $escaper->escapeUrl($block->getMonthUrl('+1 month')) ?>"
+       title="<?= $escaper->escapeHtmlAttr(__('Next Month')) ?>">&rarr;</a>
+</h2>
+<table class="data-grid mageos-versions-calendar">
+    <thead>
+        <tr>
+            <?php foreach ($block->getDayNames() as $dayName): ?>
+                <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml($dayName) ?></th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($block->getWeeks() as $week): ?>
+            <tr>
+                <?php foreach ($week as $day): ?>
+                    <td class="<?= $day['in_month'] ? '' : 'other-month' ?>">
+                        <strong><?= (int) $day['day'] ?></strong>
+                        <?php foreach ($day['updates'] as $update): ?>
+                            <a class="version <?= $escaper->escapeHtmlAttr($block->getStatusClass($update)) ?>"
+                               href="<?= $escaper->escapeUrl($block->getEditUrl($update)) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($update->getData('name')) ?>">
+                                <?= $escaper->escapeHtml($update->getData('name')) ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<p class="mageos-versions-calendar">
+    <span class="version scheduled" style="display:inline-block"><?= $escaper->escapeHtml(__('Scheduled')) ?></span>
+    <span class="version active" style="display:inline-block"><?= $escaper->escapeHtml(__('Active')) ?></span>
+    <span class="version finished" style="display:inline-block"><?= $escaper->escapeHtml(__('Finished')) ?></span>
+</p>

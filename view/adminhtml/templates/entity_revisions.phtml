@@ -1,0 +1,55 @@
+<?php
+declare(strict_types=1);
+
+/** @var \MageOS\ContentVersions\Block\Adminhtml\EntityRevisions $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$revisions = $block->getRevisions();
+?>
+<?php if ($revisions): ?>
+    <table class="data-grid">
+        <thead>
+            <tr>
+                <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Saved At')) ?></th>
+                <th class="data-grid-th" scope="col"><?= $escaper->escapeHtml(__('Actions')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($revisions as $revision): ?>
+                <?php $id = $revision['revision_id']; ?>
+                <tr>
+                    <td>
+                        <?= $escaper->escapeHtml(
+                            $block->formatDate($revision['created_at'], \IntlDateFormatter::MEDIUM, true)
+                        ) ?>
+                    </td>
+                    <td>
+                        <a href="<?= $escaper->escapeUrl($block->getActionUrl('compare', $id)) ?>">
+                            <?= $escaper->escapeHtml(__('Compare with Current Content')) ?>
+                        </a>
+                        &nbsp;|&nbsp;
+                        <form method="post"
+                              action="<?= $escaper->escapeUrl($block->getActionUrl('restore', $id)) ?>"
+                              id="version-revision-restore-<?= (int) $id ?>" style="display:inline">
+                            <input type="hidden" name="form_key"
+                                   value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+                            <button type="submit" class="action-default">
+                                <?= $escaper->escapeHtml(__('Restore')) ?>
+                            </button>
+                        </form>
+                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                            'onsubmit',
+                            'if (!confirm(' . json_encode(
+                                (string) __('Restore this revision? Unsaved changes in this form are lost.')
+                            ) . ')) { event.preventDefault(); }',
+                            '#version-revision-restore-' . (int) $id
+                        ) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p><?= $escaper->escapeHtml(__('No revision yet: one is kept at each save.')) ?></p>
+<?php endif; ?>
